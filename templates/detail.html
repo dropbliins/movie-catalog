@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{{ film.title }}{% endblock %}
+
+{% block content %}
+<a href="{{ url_for('films.home') }}" class="btn btn-sm btn-outline-secondary mb-3">← Back to list</a>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <img src="{{ film.cover }}" class="img-fluid rounded shadow" alt="{{ film.title }}">
+    </div>
+    <div class="col-md-8">
+        <h1 class="h2">{{ film.title }}
+            <small class="text-muted">({{ film.year }})</small>
+        </h1>
+        <p><span class="badge bg-warning text-dark fs-6">⭐ {{ film.rating }}</span></p>
+        <p class="mb-1"><strong>Director:</strong> {{ film.director }}</p>
+        <p class="mb-1"><strong>Year:</strong> {{ film.year }}</p>
+
+        {% if film.overview %}
+        <hr>
+        <p>{{ film.overview }}</p>
+        {% endif %}
+
+        <div class="mt-4 d-flex gap-2">
+            {% if current_user.is_authenticated %}
+            <form action="{{ url_for('favorites.toggle_favorite', film_id=film.id) }}" method="post">
+                <button class="btn {{ 'btn-danger' if film in current_user.favorites else 'btn-outline-danger' }}">
+                    {{ '❤️ Favorited' if film in current_user.favorites else '🤍 Add to favorites' }}
+                </button>
+            </form>
+            {% endif %}
+
+            {% if current_user.is_authenticated and current_user.is_admin %}
+            <a href="{{ url_for('films.edit_film', film_id=film.id) }}" class="btn btn-outline-secondary">✏️ Edit</a>
+            <form action="{{ url_for('films.delete_film', film_id=film.id) }}" method="post"
+                  onsubmit="return confirm('Delete this movie?');">
+                <button type="submit" class="btn btn-outline-danger">🗑 Delete</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

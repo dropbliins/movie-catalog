@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="get" action="{{ url_for('films.home') }}" class="row g-2 mb-4">
+    <div class="col-md-6">
+        <input type="text" name="q" value="{{ q }}" class="form-control"
+               placeholder="🔍 Search by title or director...">
+    </div>
+    <div class="col-md-4">
+        <select name="sort" class="form-select" onchange="this.form.submit()">
+            <option value="rating_desc" {{ 'selected' if sort == 'rating_desc' else '' }}>Rating (high → low)</option>
+            <option value="rating_asc"  {{ 'selected' if sort == 'rating_asc'  else '' }}>Rating (low → high)</option>
+            <option value="year_desc"   {{ 'selected' if sort == 'year_desc'   else '' }}>Year (newest)</option>
+            <option value="year_asc"    {{ 'selected' if sort == 'year_asc'    else '' }}>Year (oldest)</option>
+            <option value="title"       {{ 'selected' if sort == 'title'       else '' }}>Title (A–Z)</option>
+        </select>
+    </div>
+    <div class="col-md-2 d-grid">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+{% if films %}
+<div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
+    {% for film in films %}
+        {% include "_card.html" %}
+    {% endfor %}
+</div>
+
+{% if pagination.pages > 1 %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {{ 'disabled' if not pagination.has_prev else '' }}">
+            <a class="page-link" href="{{ url_for('films.home', page=pagination.prev_num, q=q, sort=sort) }}">← Prev</a>
+        </li>
+        <li class="page-item disabled">
+            <span class="page-link">Page {{ pagination.page }} of {{ pagination.pages }}</span>
+        </li>
+        <li class="page-item {{ 'disabled' if not pagination.has_next else '' }}">
+            <a class="page-link" href="{{ url_for('films.home', page=pagination.next_num, q=q, sort=sort) }}">Next →</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+{% elif q %}
+<div class="alert alert-warning">
+    Nothing found for “{{ q }}”.
+    <a href="{{ url_for('films.home') }}">Show all movies</a>
+</div>
+{% else %}
+<p class="text-muted">No movies yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}My Favorites{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">❤️ My Favorites</h1>
+
+{% if films %}
+<div class="row row-cols-2 row-cols-md-4 row-cols-lg-6 g-3">
+    {% for film in films %}
+        {% include "_card.html" %}
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    You have no favorite movies yet.
+    <a href="{{ url_for('films.home') }}">Browse the catalog</a> and click 🤍 Favorite!
+</div>
+{% endif %}
+{% endblock %}

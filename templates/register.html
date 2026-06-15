@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="auth-card bg-white p-5 shadow-sm">
+        <h1 class="text-center mb-4">Create account</h1>
+
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username" class="form-control form-control-lg"
+                       value="{{ username }}" minlength="3" required>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Password</label>
+                <input type="password" name="password" class="form-control form-control-lg"
+                       minlength="4" required>
+                <div class="form-text">At least 4 characters.</div>
+            </div>
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-success btn-lg">Register</button>
+            </div>
+            <p class="text-center mb-0">
+                <a href="{{ url_for('auth.login') }}" class="btn btn-link">Already have an account? Login</a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}

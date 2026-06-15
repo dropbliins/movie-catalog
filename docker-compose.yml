@@ -1,0 +1,19 @@
+# docker-compose.yml — опис сервісів, які запускає Docker.
+# Поки що тут один сервіс: база даних PostgreSQL.
+
+services:
+  db:
+    image: postgres:16            # готовий образ PostgreSQL версії 16
+    container_name: movie-catalog-db
+    restart: unless-stopped
+    environment:                  # налаштування бази (логін, пароль, назва)
+      POSTGRES_USER: movieuser
+      POSTGRES_PASSWORD: moviepass
+      POSTGRES_DB: moviedb
+    ports:
+      - "5432:5432"               # доступ до бази з нашого компʼютера на порту 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # зберігаємо дані, навіть якщо контейнер вимкнути
+
+volumes:
+  pgdata:
